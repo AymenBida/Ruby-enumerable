@@ -37,4 +37,24 @@ module Enumerable
     end
     result
   end
+
+  def my_any?(var)
+    result = false
+    my_each(var) do |item|
+      result = yield(item)
+      break if result == true
+    end
+    result
+  end
+
+  def my_none?(var)
+    result = true
+    my_each(var) do |item|
+      result = yield(item)
+      if result == true
+        return false
+      end
+    end
+    true
+  end
 end
