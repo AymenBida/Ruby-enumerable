@@ -57,4 +57,18 @@ module Enumerable
     end
     true
   end
+
+  def my_count(var)
+    ans = 0
+    if block_given?
+      my_each(var) do |item|
+        if yield(item) 
+          ans += 1
+        end
+      end
+    else
+      my_each(var) { ans += 1 }
+    end
+    ans
+  end
 end
