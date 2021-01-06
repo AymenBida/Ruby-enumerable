@@ -19,4 +19,13 @@ module Enumerable
     end
   end
   
+  def my_select(var)
+    arr = []
+    my_each(var) do |item|
+      if yield(item) 
+        arr.push(item)
+      end
+    end
+    arr
+  end
 end
