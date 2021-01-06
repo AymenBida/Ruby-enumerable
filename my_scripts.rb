@@ -18,4 +18,5 @@ module Enumerable
     else 'Error: no block given'
     end
   end
+  
 end
