@@ -28,4 +28,13 @@ module Enumerable
     end
     arr
   end
+
+  def my_all?(var)
+    result = false
+    my_each(var) do |item|
+      result = yield(item)
+      break if result == false
+    end
+    result
+  end
 end
