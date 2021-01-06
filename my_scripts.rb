@@ -72,16 +72,16 @@ module Enumerable
     ans
   end
 
-  def my_map(var)
+  def my_map(var, a_proc = nil)
     arr = []
-    if block_given?
-      for i in 0...var.length
-        yield(var[i])
+    for i in 0...var.length do
+      unless a_proc.nil?
+        arr.push(a_proc.call(var[i]))
+      else
         arr.push(yield(var[i]))
       end
-      arr
-    else 'Error: no block given'
     end
+    arr
   end
 
   def my_inject(var, accumulator = nil)
