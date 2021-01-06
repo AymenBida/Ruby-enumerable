@@ -18,14 +18,10 @@ module Enumerable
     else 'Error: no block given'
     end
   end
-  
+
   def my_select(var)
     arr = []
-    my_each(var) do |item|
-      if yield(item) 
-        arr.push(item)
-      end
-    end
+    my_each(var) { |item| arr.push(item) if yield(item) }
     arr
   end
 
@@ -51,9 +47,7 @@ module Enumerable
     result = true
     my_each(var) do |item|
       result = yield(item)
-      if result == true
-        return false
-      end
+      return false if result == true
     end
     true
   end
@@ -62,9 +56,7 @@ module Enumerable
     ans = 0
     if block_given?
       my_each(var) do |item|
-        if yield(item) 
-          ans += 1
-        end
+        ans += 1 if yield(item)
       end
     else
       my_each(var) { ans += 1 }
@@ -75,10 +67,10 @@ module Enumerable
   def my_map(var, a_proc = nil)
     arr = []
     for i in 0...var.length do
-      unless a_proc.nil?
-        arr.push(a_proc.call(var[i]))
-      else
+      if a_proc.nil?
         arr.push(yield(var[i]))
+      else
+        arr.push(a_proc.call(var[i]))
       end
     end
     arr
