@@ -83,4 +83,20 @@ module Enumerable
     else 'Error: no block given'
     end
   end
+
+  def my_inject(var, accumulator = nil)
+    first_index = 0
+    if accumulator.nil?
+      accumulator = var[0]
+      first_index = 1
+    end
+    for i in first_index...var.length
+      accumulator = yield(accumulator, var[i])
+    end
+    accumulator
+  end
+
+  def multiply_els(var)
+    my_inject(var) { |acc, item| acc * item }
+  end
 end
