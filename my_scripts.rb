@@ -71,4 +71,16 @@ module Enumerable
     end
     ans
   end
+
+  def my_map(var)
+    arr = []
+    if block_given?
+      for i in 0...var.length
+        yield(var[i])
+        arr.push(yield(var[i]))
+      end
+      arr
+    else 'Error: no block given'
+    end
+  end
 end
