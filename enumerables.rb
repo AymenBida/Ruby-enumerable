@@ -1,6 +1,7 @@
 module Enumerable
   def my_each
     return to_enum unless block_given?
+
     arr = to_a
     arr.length.times { |item| yield(arr[item]) }
     self
@@ -8,6 +9,7 @@ module Enumerable
 
   def my_each_with_index
     return to_enum unless block_given?
+
     arr = to_a
     arr.length.times { |item| yield(arr[item], item) }
     self
@@ -15,15 +17,16 @@ module Enumerable
 
   def my_select
     return to_enum unless block_given?
-    newArr = []
-    my_each { |item| newArr.push(item) if yield(item) }
-    newArr
+
+    new_arr = []
+    my_each { |item| new_arr.push(item) if yield(item) }
+    new_arr
   end
 
   def my_all?
     unless block_given?
-        my_each { |item| return false if item == false }
-        return true
+      my_each { |item| return false if item == false }
+      return true
     end
     result = false
     my_each do |item|
@@ -35,8 +38,8 @@ module Enumerable
 
   def my_any?
     unless block_given?
-        my_each { |item| return true if item == true }
-        return false
+      my_each { |item| return true if item == true }
+      return false
     end
     result = false
     my_each do |item|
@@ -48,8 +51,8 @@ module Enumerable
 
   def my_none?
     unless block_given?
-        my_each { |item| return false if item == true }
-        return true
+      my_each { |item| return false if item == true }
+      return true
     end
     result = true
     my_each do |item|
@@ -72,20 +75,22 @@ module Enumerable
   end
 
   def my_map(a_proc = nil)
-    newArr = []
+    new_arr = []
     my_each do |item|
       if a_proc.nil?
         return to_enum unless block_given?
-        newArr.push(yield(item))
+
+        new_arr.push(yield(item))
       else
-        newArr.push(a_proc.call(item))
+        new_arr.push(a_proc.call(item))
       end
     end
-    newArr
+    new_arr
   end
 
   def my_inject(accumulator = nil)
     return raise LocalJumpError, 'no block given' unless block_given?
+
     arr = to_a
     first_index = 0
     if accumulator.nil?
@@ -93,8 +98,8 @@ module Enumerable
       first_index = 1
     end
     while first_index < arr.length
-        accumulator = yield(accumulator, arr[first_index])
-        first_index += 1
+      accumulator = yield(accumulator, arr[first_index])
+      first_index += 1
     end
     accumulator
   end
