@@ -23,11 +23,28 @@ module Enumerable
     new_arr
   end
 
-  def my_all?
-    unless block_given?
-      my_each { |item| return false if item == false }
+  def my_all?(arg = nil)
+    unless arg == nil
+      p 'arg not empty'
+    if arg.is_a? Class
+      my_each do |item| 
+        return false unless item.is_a?(arg)
+        return true
+      end
+    elsif arg.is_a? Regexp
+      my_each { |item| return false unless item =~ arg }
+      return true
+    else
+      my_each { |item| return false unless item == arg}
       return true
     end
+    end
+    unless block_given?
+      p 'no block given'
+      my_each { |item| return false if item == false || item == nil }
+      return true
+    end
+    p 'block given'
     result = false
     my_each do |item|
       result = yield(item)
