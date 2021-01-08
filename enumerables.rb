@@ -170,7 +170,7 @@ end
   end
 
   def multiply_els(var)
-    var.my_inject { |acc, item| acc * item }
+    var.my_inject(:*)
   end
 end
 
