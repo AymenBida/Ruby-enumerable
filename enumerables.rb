@@ -136,7 +136,7 @@ module Enumerable
   end
 
   def my_inject(acc = nil, opp = nil)
-    return 'no block or argument' if !block_given? && acc.nil? && opp.nil?
+    return raise LocalJumpError, 'No block or argument is given' if !block_given? && acc.nil? && opp.nil?
 
     if !block_given?
       if opp.nil?
@@ -162,10 +162,10 @@ module Enumerable
     end
     acc
   end
+end
 
-  def multiply_els(var)
-    var.my_inject(:*)
-  end
+def multiply_els(array)
+  array.my_inject(:*)
 end
 
 # rubocop:enable Metrics/CyclomaticComplexity
