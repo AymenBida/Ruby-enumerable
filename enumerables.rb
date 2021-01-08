@@ -25,26 +25,23 @@ module Enumerable
 
   def my_all?(arg = nil)
     unless arg == nil
-      p 'arg not empty'
-    if arg.is_a? Class
-      my_each do |item| 
-        return false unless item.is_a?(arg)
+      if arg.is_a? Class
+        my_each do |item| 
+          return false unless item.is_a?(arg)
+        end
+        return true
+      elsif arg.is_a? Regexp
+        my_each { |item| return false unless item =~ arg }
+        return true
+      else
+        my_each { |item| return false unless item == arg}
         return true
       end
-    elsif arg.is_a? Regexp
-      my_each { |item| return false unless item =~ arg }
-      return true
-    else
-      my_each { |item| return false unless item == arg}
-      return true
-    end
     end
     unless block_given?
-      p 'no block given'
-      my_each { |item| return false if item == false || item == nil }
+      my_each { |item| return false if !item }
       return true
     end
-    p 'block given'
     result = false
     my_each do |item|
       result = yield(item)
@@ -53,9 +50,23 @@ module Enumerable
     result
   end
 
-  def my_any?
+  def my_any?(arg = nil)
+    unless arg == nil
+      if arg.is_a? Class
+        my_each do |item| 
+          return true if item.is_a?(arg)
+        end
+        return false
+      elsif arg.is_a? Regexp
+        my_each { |item| return true if item =~ arg }
+        return false
+      else
+        my_each { |item| return true if item == arg}
+        return false
+      end
+    end
     unless block_given?
-      my_each { |item| return true if item == true }
+      my_each { |item| return true if item }
       return false
     end
     result = false
@@ -64,20 +75,34 @@ module Enumerable
       break if result == true
     end
     result
-  end
+ end
 
-  def my_none?
-    unless block_given?
-      my_each { |item| return false if item == true }
+ def my_none?(arg = nil)
+  unless arg == nil
+    if arg.is_a? Class
+      my_each do |item| 
+        return false if item.is_a?(arg)
+      end
+      return true
+    elsif arg.is_a? Regexp
+      my_each { |item| return false if item =~ arg }
+      return true
+    else
+      my_each { |item| return false if item == arg}
       return true
     end
-    result = true
-    my_each do |item|
-      result = yield(item)
-      return false if result == true
-    end
-    true
   end
+  unless block_given?
+    my_each { |item| return false if item }
+    return true
+  end
+  result = true
+  my_each do |item|
+    result = yield(item)
+    return false if result == true
+  end
+  true
+end
 
   def my_count
     ans = 0
