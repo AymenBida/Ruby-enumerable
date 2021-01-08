@@ -29,22 +29,20 @@ module Enumerable
   end
 
   def my_all?(arg = nil)
-    unless arg == nil
+    unless arg.nil?
       if arg.is_a? Class
-        my_each do |item| 
+        my_each do |item|
           return false unless item.is_a?(arg)
         end
-        return true
       elsif arg.is_a? Regexp
         my_each { |item| return false unless item =~ arg }
-        return true
       else
-        my_each { |item| return false unless item == arg}
-        return true
+        my_each { |item| return false unless item == arg }
       end
+      return true
     end
     unless block_given?
-      my_each { |item| return false if !item }
+      my_each { |item| return false unless item }
       return true
     end
     result = false
@@ -56,19 +54,17 @@ module Enumerable
   end
 
   def my_any?(arg = nil)
-    unless arg == nil
+    unless arg.nil?
       if arg.is_a? Class
-        my_each do |item| 
+        my_each do |item|
           return true if item.is_a?(arg)
         end
-        return false
       elsif arg.is_a? Regexp
         my_each { |item| return true if item =~ arg }
-        return false
       else
-        my_each { |item| return true if item == arg}
-        return false
+        my_each { |item| return true if item == arg }
       end
+      return false
     end
     unless block_given?
       my_each { |item| return true if item }
@@ -80,52 +76,50 @@ module Enumerable
       break if result == true
     end
     result
- end
+  end
 
- def my_none?(arg = nil)
-  unless arg == nil
-    if arg.is_a? Class
-      my_each do |item| 
-        return false if item.is_a?(arg)
+  def my_none?(arg = nil)
+    unless arg.nil?
+      if arg.is_a? Class
+        my_each do |item|
+          return false if item.is_a?(arg)
+        end
+      elsif arg.is_a? Regexp
+        my_each { |item| return false if item =~ arg }
+      else
+        my_each { |item| return false if item == arg }
       end
       return true
-    elsif arg.is_a? Regexp
-      my_each { |item| return false if item =~ arg }
-      return true
-    else
-      my_each { |item| return false if item == arg}
+    end
+    unless block_given?
+      my_each { |item| return false if item }
       return true
     end
+    result = true
+    my_each do |item|
+      result = yield(item)
+      return false if result == true
+    end
+    true
   end
-  unless block_given?
-    my_each { |item| return false if item }
-    return true
-  end
-  result = true
-  my_each do |item|
-    result = yield(item)
-    return false if result == true
-  end
-  true
-end
 
-def my_count(arg = nil)
-  ans = 0
-  unless arg == nil
-    my_each do |item|
-      ans += 1 if item == arg
+  def my_count(arg = nil)
+    ans = 0
+    unless arg.nil?
+      my_each do |item|
+        ans += 1 if item == arg
+      end
+      return ans
     end
-    return ans
-  end
-  if block_given?
-    my_each do |item|
-      ans += 1 if yield(item)
+    if block_given?
+      my_each do |item|
+        ans += 1 if yield(item)
+      end
+    else
+      my_each { ans += 1 }
     end
-  else
-    my_each { ans += 1 }
+    ans
   end
-  ans
-end
 
   def my_map(a_proc = nil)
     new_arr = []
@@ -150,20 +144,20 @@ end
         acc = nil
       end
       opp.to_sym
-      my_each do |item| 
-        if acc.nil? 
-          acc = item
-        else 
-          acc = acc.send(opp, item)
-        end
+      my_each do |item|
+        acc = if acc.nil?
+                item
+              else
+                acc.send(opp, item)
+              end
       end
     else
-      my_each do |item| 
-        if acc.nil? 
-          acc = item 
-        else 
-          acc = yield(acc, item)
-        end
+      my_each do |item|
+        acc = if acc.nil?
+                item
+              else
+                yield(acc, item)
+              end
       end
     end
     acc
