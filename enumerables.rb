@@ -141,20 +141,32 @@ end
     new_arr
   end
 
-  def my_inject(accumulator = nil)
-    return raise LocalJumpError, 'no block given' unless block_given?
+  def my_inject(acc = nil, opp = nil)
+    return 'no block or argument' if !block_given? && acc.nil? && opp.nil?
 
-    arr = to_a
-    first_index = 0
-    if accumulator.nil?
-      accumulator = arr[0]
-      first_index = 1
+    if !block_given?
+      if opp.nil?
+        opp = acc
+        acc = nil
+      end
+      opp.to_sym
+      my_each do |item| 
+        if acc.nil? 
+          acc = item
+        else 
+          acc = acc.send(opp, item)
+        end
+      end
+    else
+      my_each do |item| 
+        if acc.nil? 
+          acc = item 
+        else 
+          acc = yield(acc, item)
+        end
+      end
     end
-    while first_index < arr.length
-      accumulator = yield(accumulator, arr[first_index])
-      first_index += 1
-    end
-    accumulator
+    acc
   end
 
   def multiply_els(var)
