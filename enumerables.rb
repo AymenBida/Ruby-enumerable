@@ -1,3 +1,8 @@
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/PerceivedComplexity
+# rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/ModuleLength
+
 module Enumerable
   def my_each
     return to_enum unless block_given?
@@ -156,3 +161,8 @@ end
     var.my_inject { |acc, item| acc * item }
   end
 end
+
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/PerceivedComplexity
+# rubocop:enable Metrics/MethodLength
+# rubocop:enable Metrics/ModuleLength
