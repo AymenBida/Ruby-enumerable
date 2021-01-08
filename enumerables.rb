@@ -104,17 +104,23 @@ module Enumerable
   true
 end
 
-  def my_count
-    ans = 0
-    if block_given?
-      my_each do |item|
-        ans += 1 if yield(item)
-      end
-    else
-      my_each { ans += 1 }
+def my_count(arg = nil)
+  ans = 0
+  unless arg == nil
+    my_each do |item|
+      ans += 1 if item == arg
     end
-    ans
+    return ans
   end
+  if block_given?
+    my_each do |item|
+      ans += 1 if yield(item)
+    end
+  else
+    my_each { ans += 1 }
+  end
+  ans
+end
 
   def my_map(a_proc = nil)
     new_arr = []
